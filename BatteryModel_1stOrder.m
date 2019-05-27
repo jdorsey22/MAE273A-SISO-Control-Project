@@ -1,15 +1,18 @@
-% syms s Rc Cc Cbat alpha R0
-% syms s
+%Load files for Simulink Model
+load('IV_data_linear.mat')
 s = tf('s');
+
+%battery model arameters
 Rc =0.015; 
 Cc = 2400;
 Cbat = 5*3600;
 alpha =0.65;
 R0=0.01;
 
+%tunning parameters
 K = -18000/.65;   %gain
 zeta = 0.707;     %damping ratio
-wn = 0.0005;         %natural frequency
+wn = 0.0005;      %natural frequency
 
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0] ;
