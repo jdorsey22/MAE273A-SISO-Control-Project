@@ -32,6 +32,6 @@ L = Gc*Gp;         %open loop TF
 sysTF = Gc*Gp/(1+Gc*Gp); %actual sys TF
 
 figure(1)
-bode(Y,T,S), legend('Y','T','S')
+bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
-step(sysTF), stepinfo(sysTF)
+step(sysTF),legend('System Step Response'), grid on, stepinfo(sysTF)
