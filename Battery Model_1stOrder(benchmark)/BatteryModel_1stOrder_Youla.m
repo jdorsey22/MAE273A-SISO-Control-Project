@@ -19,7 +19,7 @@ wn = 0.0005;      %natural frequency
 A = [-1/(Rc*Cc) 0; 0 0];
 B = [1/Cc; -1/Cbat];
 % C = [-1 alpha];
-C = [0 alpha];
+C = [-1 alpha];
 D = -R0;
 
 SI = [s 0;0 s];
