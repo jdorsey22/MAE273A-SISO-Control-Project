@@ -13,7 +13,7 @@ Vocv0 = 3.435; %V
 %tunning parameters
 K = 1;   %gain
 zeta = 0.707;     %damping ratio
-wn = 2;      %natural frequency
+wn = 0.01;      %natural frequency
 
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0];
@@ -30,7 +30,7 @@ Gc = Y/S;   %controller
 L = Gc*Gp;         %open loop TF
 sysTF = Gc*Gp/(1+Gc*Gp); %actual sys TF
 % [num,den] = tfdata(Gp) 
-[num den] = tfdata(Gp, 'v');
+[num den] = tfdata(Gc, 'v');
 figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
