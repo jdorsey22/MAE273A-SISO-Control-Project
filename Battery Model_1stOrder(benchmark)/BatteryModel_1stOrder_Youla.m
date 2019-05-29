@@ -35,3 +35,5 @@ figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
 step(sysTF),legend('System Step Response'), grid on, stepinfo(sysTF)
+
+sim('Estimator_Simulink') %run simulink model
