@@ -3,11 +3,11 @@ load('IV_data_linear.mat')
 s = tf('s');
 
 %battery model parameters
-Rc =0.015;     %Ohms
+Rc = 0.015;    %Ohms
 Cc = 2400;     %F
 Cbat = 5*3600;
 alpha =0.65;   
-R0=0.01;       %Ohms
+R0 = 0.01;     %Ohms
 Vocv0 = 3.435; %V
 
 %tunning parameters
@@ -22,14 +22,14 @@ C = [-1 alpha];
 D = -R0;
 
 SI = [s 0;0 s];
-Gp = C*(SI-A)^-1*B+D;        %plant
+Gp = C*(SI-A)^-1*B+D;         %plant
 T = minreal(K*wn^2/(s^2+2*zeta*wn*s+wn^2)); %complimentary
-Y = minreal(T/Gp);           %youla
-S = minreal(1-T);            %sensitivity
-Gc = Y/S;                    %controller
-L = Gc*Gp;                   %open loop TF
-sysTF = Gc*Gp/(1+Gc*Gp);     %actual sys TF
-[num den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
+Y = minreal(T/Gp);            %youla
+S = minreal(1-T);             %sensitivity
+Gc = Y/S;                     %controller
+L = Gc*Gp;                    %open loop TF
+sysTF = Gc*Gp/(1+Gc*Gp);      %actual sys TF
+[num, den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
 figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
