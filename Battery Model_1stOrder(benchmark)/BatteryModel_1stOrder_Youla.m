@@ -13,7 +13,7 @@ Vocv0 = 3.435; %V
 %tunning parameters
 K = 1;   %gain
 zeta = 0.707;     %damping ratio
-wn = 0.1;      %natural frequency
+wn = 2;      %natural frequency
 
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0];
