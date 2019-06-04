@@ -7,19 +7,26 @@ Rc = 0.015;    %Ohms
 Cc = 2400;     %F
 Cbat = 5*3600;
 alpha =0.65;   
-R0 = 0.01;     %Ohms
+% R0 = 0.01;     %Ohms
+R0 = .1;     %Ohms
+
 Vocv0 = 3.435; %V
 
 %tunning parameters
 K = 1;         %gain
 zeta = 0.707;  %damping ratio
-wn = 20;      %natural frequency
+wn = 5;      %natural frequency
 
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0];
 B = [1/Cc; -1/Cbat];
 C = [-1 alpha];
 D = -R0;
+
+A1 = A(1,1);
+B1 = B(1,1);
+A2 = A(2,2); 
+B2 = B(2,1); 
 
 SI = [s 0;0 s];
 Gp = C*(SI-A)^-1*B+D;         %plant
