@@ -10,7 +10,15 @@ alpha =0.65;
 % R0 = 0.01;     %Ohms
 R0 = .1;     %Ohms
 
-Vocv0 = 3.435; %V
+% Vocv0 = 3.435; %V
+
+
+Voc0_1 = 2.915;
+Voc0_2 = 3.4099; 
+alpha1 = 5.552;
+alpha2 = .6389; 
+
+soc_crossing = .125; 
 
 %tunning parameters
 K = 1;         %gain
@@ -22,13 +30,14 @@ wn = 5;      %natural frequency
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0];
 B = [1/Cc; -1/Cbat];
-C = [-1 alpha];
+C = [-1 alpha1];
 D = -R0;
 
 A1 = A(1,1);
 B1 = B(1,1);
 A2 = A(2,2); 
 B2 = B(2,1); 
+C2 = C(1,2); 
 
 SI = [s 0;0 s];
 Gp = C*(SI-A)^-1*B+D;         %plant
@@ -39,7 +48,32 @@ Gc = Y/S;                     %controller
 L = Gc*Gp;                    %open loop TF
 sysTF = Gc*Gp/(1+Gc*Gp);      %actual sys TF
 
-[num, den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
+[num1, den1] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%Second Youla Controler) 
+
+A = [-1/(Rc*Cc) 0; 0 0];
+B = [1/Cc; -1/Cbat];
+C = [-1 alpha2];
+D = -R0;
+
+A1 = A(1,1);
+B1 = B(1,1);
+A2 = A(2,2); 
+B2 = B(2,1); 
+C2 = C(1,2); 
+
+SI = [s 0;0 s];
+Gp = C*(SI-A)^-1*B+D;         %plant
+T = minreal(K*wn^2/(s^2+2*zeta*wn*s+wn^2)); %complimentary
+Y = minreal(T/Gp);            %youla
+S = minreal(1-T);             %sensitivity
+Gc = Y/S;                     %controller
+L = Gc*Gp;                    %open loop TF
+sysTF = Gc*Gp/(1+Gc*Gp);      %actual sys TF
+
+[num2, den2] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
 %%
 figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
