@@ -18,9 +18,10 @@ Ag=Ag-0.08*eye(1); % slightly shift A to avoid poles on jw axis
 Gpn=tf(num,den); % perturbed plant
 
 % %Hinf shaping filter
-W1=(s+10)/(2*s+0.001); %have a bandwidth of 1Hz (made it 10Hz so step input response shows tracking)
+W1=(s+10)/(40*s+0.001); %have a bandwidth of 1Hz (made it 10Hz so step input response shows tracking)
 W2=0.005;%1;
-W3=0.4;  
+% W3=0.4;  
+W3 = makeweight(1/12,0.639,10);
 
 %Hinf shaping filter
 % W1=(s+100)/(2*s+0.001);
