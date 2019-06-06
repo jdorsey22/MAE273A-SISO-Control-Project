@@ -14,8 +14,8 @@ Vocv0 = 3.435; %V
 
 %tunning parameters
 K = 1;         %gain
-% zeta = 0.707;  %damping ratio
-zeta = 0.25;  %damping ratio
+zeta = 0.707;  %damping ratio
+% zeta = 0.25;  %damping ratio
 
 wn = 5;      %natural frequency
 
@@ -40,7 +40,6 @@ L = Gc*Gp;                    %open loop TF
 sysTF = Gc*Gp/(1+Gc*Gp);      %actual sys TF
 
 [num, den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
-%%
 figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
