@@ -21,7 +21,7 @@ Gpn=tf(num,den); % perturbed plant
 W1=(s+10)/(2*s+0.001); %have a bandwidth of 1Hz (made it 10Hz so step input response shows tracking)
 W2=0.005;%1;
 % W3=0.4;  
-W3 = makeweight(0.5,0.639,10);
+W3 = makeweight(1/2,6,10);
 
 %Hinf shaping filter
 % W1=(s+100)/(2*s+0.001);
@@ -81,7 +81,8 @@ RS = W3*T;
 semilogx(w,magNP,'b',w,magRS,'r'), grid, legend('W1*S','W3*T')
 
 figure(6)
-bode(S,T,W1,'--',W3,'-.'), legend('S','T','W3','W1')
+% bode(S,T,W1,'--'), legend('S','T','W1')
+bode(S,T,W1,'--',W3,'-.'), legend('S','T','W1','W3')
 
 %% example 2 
 Gp=(1-s)/s^3;
