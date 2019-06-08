@@ -1,9 +1,7 @@
 
 clear all
 %Load files for Simulink Model
-% load('IV_data_linear.mat')
-load('FirstOrderTruth_BASELINE_linear.mat')
-
+load('IV_data_linear.mat')
 s = tf('s');
 
 %battery model parameters
@@ -11,15 +9,13 @@ Rc = 0.015;    %Ohms
 Cc = 2400;     %F
 Cbat = 5*3600;
 alpha =0.65;   
-R0 = 0.01;     %Ohms
+R0 = 0.1;     %Ohms
 Vocv0 = 3.435; %V
 
 %tunning parameters
 K = 1;         %gain
-% zeta = 0.707;  %damping ratio
-zeta = 0.5;  %damping ratio
-
-wn = 75;      %natural frequency
+zeta = 0.707;  %damping ratio
+wn = 10;      %natural frequency
 
 %continuous time ss model
 A = [-1/(Rc*Cc) 0; 0 0];
@@ -54,31 +50,22 @@ sysTF = minreal(Gc*Gp/(1+Gc*Gp));      %actual sys TF
 % Hcl = feedback(H,1);
 
 
-%%
-out = sim('Estimator_Simulink_trial1') ;   %run simulink model
+
+sim('Estimator_Simulink_trial1') ;   %run simulink model
 
 %%
-est_soc = out.SOC_est;
-tout = out.tout; 
-%%
-
-plot(tout, est_soc)
-hold on 
-plot(t,SOC_act)
-
+est_soc = ans.SOC_est;
 
 %%
-
-
-est_soc = est_soc(1:end-1); 
-
-tout = out.tout; 
-
-tout_d = tout(1:end-1);
+est_soc = est_soc(1:end-1);
 
 %%
 
 hold on
 plot(t,SOC_act)
-plot(tout_d, est_soc)
+plot(est_sco
 
+
+%%
+
+sim('Estimator_Simulink_trial1')    %run simulink model

@@ -12,15 +12,15 @@ Rc = 0.015;    %Ohms
 Cc = 2400;     %F
 Cbat = 5*3600;
 alpha =0.65;   
-R0 = 0.1;     %Ohms
+R0 = 0.01;     %Ohms
 Vocv0 = 3.435; %V
 
 % R0 = R0*1.15;
 % Rc = Rc*1.15;
 % Cc = Cc*1.15;
-
-R0 = R0*1.10;
-Rc = Rc*1.10;
+% 
+% R0 = R0*1.10;
+% Rc = Rc*1.10;
 
 
 
@@ -153,7 +153,7 @@ SOC_act = SOC_act';
 
 %%
 
-save('FirstOrderTruth_R010RC10_linear.mat','V','SOC_act','t','I'); 
+save('FirstOrderTruth_BASELINE_linear.mat','V','SOC_act','t','I'); 
 
 
 %% 
