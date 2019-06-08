@@ -46,6 +46,6 @@ sysTF = minreal(Gc*Gp/(1+Gc*Gp));      %actual sys TF
 % G = tf(num,den)
 % H = G*Gc
 % Hcl = feedback(H,1);
-
+%%
 
 sim('Estimator_Simulink_trial1')    %run simulink model

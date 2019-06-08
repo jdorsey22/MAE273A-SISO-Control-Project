@@ -40,9 +40,18 @@ L = Gc*Gp;                    %open loop TF
 sysTF = Gc*Gp/(1+Gc*Gp);      %actual sys TF
 
 [num, den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
+
+%%
 figure(1)
 bode(Y,T,S), legend('Y','T','S'), grid on
 figure(2)
 step(sysTF),legend('System Step Response'), grid on, stepinfo(sysTF)
+
+figure() 
+step(T)
+figure() 
+bode(L)
+bode(T)
+
 %%
 sim('Estimator_Simulink')    %run simulink model
