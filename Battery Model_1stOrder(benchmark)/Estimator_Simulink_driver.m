@@ -126,8 +126,80 @@ figure()
 hold on 
 plot(t,SOC_act); 
 plot(tout,est_soc);
-
-
+% %% Hinf Optimization Based Controller
+% 
+% 
+% List = ["FirstOrderTruth_BASELINE_linear.mat","FirstOrderTruth_R0_25_linear.mat","FirstOrderTruth_RC_25_linear.mat","FirstOrderTruth_Cc_25_linear.mat","FirstOrderTruth_R0_50_linear.mat","FirstOrderTruth_RC_50_linear.mat","FirstOrderTruth_CC_50_linear.mat","FirstOrderTruth_R0_RC_20_linear.mat","FirstOrderTruth_BASELINE_nonlinear.mat","FirstOrderTruth_R0_25_nonlinear.mat","FirstOrderTruth_RC_25_nonlinear.mat","FirstOrderTruth_CC_25_nonlinear.mat","FirstOrderTruth_R0_50_nonlinear.mat","FirstOrderTruth_RC_50_nonlinear.mat","FirstOrderTruth_CC_50_nonlinear.mat","FirstOrderTruth_R0_RC_20_nonlinear.mat"];
+% NameList = ["Linear Baseline", "R0:25% Linear", "RC:25% Linear","CC:25% Linear","R0:50% Linear","RC:50% Linear","CC:50% Linear","R0:20% RC: 20%Linear","Nonlinear Baseline ","R0:25% Nonlinear","RC:25% Nonlinear","CC:25% Nonlinear","R0:50% Nonlinear","RC:50% Nonlinear","CC:50% Nonlinear", "R0:20% RC:20% Nonlinear" ];
+% 
+% 
+% for k = 1:length(List)
+%     load(List(k))
+% s=tf('s');
+% 
+% Rc = 0.015;    %Ohms
+% Cc = 2400;     %F
+% Cbat = 5*3600;
+% alpha =0.65;   
+% R0 = 0.01;     %Ohms
+% Vocv0 = 3.435; %V
+% 
+% %tunning parameters
+% K = 1;         %gain
+% % zeta = 0.707;  %damping ratio
+% zeta = 0.87;  %damping ratio
+% 
+% wn = 60;      %natural frequency
+% 
+% %continuous time ss model
+% A = [-1/(Rc*Cc) 0; 0 0];
+% B = [1/Cc; -1/Cbat];
+% C = [-1 alpha];
+% D = -R0;
+% 
+% A1 = A(1,1);
+% B1 = B(1,1);
+% A2 = A(2,2); 
+% B2 = B(2,1); 
+% C2 = alpha;
+% 
+% 
+% Gp = (-64800*s^2 - 2093.4*s - 0.65)/(18000*s*(36*s+1));  %plant
+% sysg=ss(Gp);
+% [Ag,Bg,Cg,Dg]=ssdata(sysg);
+% 
+% Ag=Ag-0.08*eye(1); % slightly shift A to avoid poles on jw axis
+% 
+% [num,den]=ss2tf(Ag,Bg,Cg,Dg);
+% Gpn=tf(num,den); % perturbed plant
+% 
+% % %Hinf shaping filter
+% W1=(s+43)/(2*s+0.01); %(BW >= 65rad/s(CL at -6dB) so step input resp shows tracking at high freq) *input data at 10Hz
+% W2=0.05;
+% % W3=0.5;  
+% W3 = makeweight(1/2,43,50);  %(low freq gain, cross over freq, high freq gain) 
+%                              %^^to make it look like a differentiator!
+%                            
+% %Hinf Controller Computation
+% ssga_=augtf(Gpn,W1,W2,W3);
+% [sys3,sscl,GAM]=hinfsyn(ssga_);  %sys3=controller, sscl=CL tf (w/z), 
+%   
+% % Hinf Controller
+% Gc=minreal(tf(sys3));
+% 
+% [num, den] = tfdata(Gc, 'v'); %get numerator and denominator of Gc tf
+% 
+% out = sim('Estimator_Simulink_trial1') ;   %run simulink model
+% 
+% est_soc = out.SOC_est;
+% tout = out.tout; 
+% 
+% figure() 
+% hold on 
+% plot(t,SOC_act); 
+% plot(tout,est_soc);
+% 
+% end 
 %% Kalman Filter 
 
 List = ["FirstOrderTruth_BASELINE_linear.mat","FirstOrderTruth_R0_25_linear.mat","FirstOrderTruth_RC_25_linear.mat","FirstOrderTruth_Cc_25_linear.mat","FirstOrderTruth_R0_50_linear.mat","FirstOrderTruth_RC_50_linear.mat","FirstOrderTruth_CC_50_linear.mat","FirstOrderTruth_R0_RC_20_linear.mat","FirstOrderTruth_BASELINE_nonlinear.mat","FirstOrderTruth_R0_25_nonlinear.mat","FirstOrderTruth_RC_25_nonlinear.mat","FirstOrderTruth_CC_25_nonlinear.mat","FirstOrderTruth_R0_50_nonlinear.mat","FirstOrderTruth_RC_50_nonlinear.mat","FirstOrderTruth_CC_50_nonlinear.mat","FirstOrderTruth_R0_RC_20_nonlinear.mat"];
@@ -302,6 +374,8 @@ end
 
 %% RMS Tabulation 
 
+NameList = ["Linear Baseline", "R0:25% Linear", "RC:25% Linear","CC:25% Linear","R0:50% Linear","RC:50% Linear","CC:50% Linear","R0:20% RC: 20%Linear","Nonlinear Baseline ","R0:25% Nonlinear","RC:25% Nonlinear","CC:25% Nonlinear","R0:50% Nonlinear","RC:50% Nonlinear","CC:50% Nonlinear", "R0:20% RC:20% Nonlinear" ];
+
 
 for i = 1:length(List)
 
@@ -314,9 +388,9 @@ Kalman_est_rms(1,i) = rms(KALMAN_ESTIMATED(:,i));
 
 EKF_act_rms(1,i) = rms(EXTENDED_KALMAN_ACTUAL(:,1)); 
 EKF_est_rms(1,i) = rms(EXTENDED_KALMAN_ESTIMATED(:,1)); 
+end
 
-
-table = [ "",NameList;...
+table = [ " ", NameList;...
          "Youla Actual RMS", Youla_act_rms;...
          "Youla Estimated RMS", Youla_est_rms;...
          "Youla RMS Error", (Youla_act_rms-Youla_est_rms);... 
@@ -327,8 +401,8 @@ table = [ "",NameList;...
 
          "EKF Actual RMS", EKF_act_rms; ...
          "EKF Estimated RMS", EKF_est_rms;...
-         "EKF RMS Error", (EKF_act_rms-EKF_est_rms);... 
-]; 
+         "EKF RMS Error", (EKF_act_rms-EKF_est_rms)]; 
 
-end 
+open_system('Estimator_Simulink_trial1')
+
 
